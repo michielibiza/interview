@@ -1,5 +1,9 @@
 package nl.michiel.zenlyinterview
 
+import android.graphics.Color.green
+import android.graphics.Color.red
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,7 +17,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         pagerView.adapter = initAdapter()
+        pagerView.background = GradientDrawable().also {
+            it.orientation = LEFT_RIGHT
+            GradientAnimator(it, getColor(R.color.red), getColor(R.color.blue), getColor(R.color.green), getColor(R.color.yellow))
+                .connect(pagerView)
+        }
     }
 
     private fun initAdapter(): PagerAdapter {
