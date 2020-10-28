@@ -18,8 +18,9 @@ class Hsv(@ColorInt rgba: Int) {
     }
 
     fun mixToColor(other: Hsv, factor: Float): Int {
+        val hueDiff = h.degreesTo(other.h)
         val mixed = floatArrayOf(
-            mix(h, other.h, factor),
+            h + hueDiff * factor,
             mix(s, other.s, factor),
             mix(v, other.v, factor)
         )
@@ -27,4 +28,11 @@ class Hsv(@ColorInt rgba: Int) {
     }
 
     private fun mix(a: Float, b: Float, factor: Float) = a + (b - a) * factor
+}
+
+private fun Float.degreesTo(other: Float): Float {
+    val diff = other - this
+    if (diff > 180) return 360 - diff
+    if (diff < -180) return -360 - diff
+    return diff
 }

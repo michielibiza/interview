@@ -3,6 +3,7 @@ package nl.michiel.zenlyinterview
 import android.graphics.drawable.GradientDrawable
 import androidx.annotation.ColorInt
 import androidx.viewpager.widget.ViewPager
+import timber.log.Timber
 
 class GradientAnimator(
     private val gradient: GradientDrawable,
@@ -26,7 +27,8 @@ class GradientAnimator(
             override fun onPageScrolled(
                 position: Int, positionOffset: Float, positionOffsetPixels: Int
             ) {
-                setAnimationValue(position + positionOffset / pageCount)
+                Timber.d("$position $positionOffset")
+                setAnimationValue((position + positionOffset) / (pageCount - 1))
             }
 
             override fun onPageSelected(position: Int) {
@@ -39,6 +41,7 @@ class GradientAnimator(
     }
 
     private fun setAnimationValue(value: Float) {
+        Timber.d("blend value = $value")
         val color1 = blend(startHsv1, endHsv1, value)
         val color2 = blend(startHsv2, endHsv2, value)
         gradient.colors = intArrayOf(color1, color2)
