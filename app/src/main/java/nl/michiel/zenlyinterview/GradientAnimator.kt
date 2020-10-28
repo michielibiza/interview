@@ -13,31 +13,23 @@ class GradientAnimator(
     @ColorInt private val endColor2: Int
 ) {
 
-    private val startHsv1 = Hsv(startColor1)
-    private val startHsv2 = Hsv(startColor2)
-    private val endHsv1 = Hsv(endColor1)
-    private val endHsv2 = Hsv(endColor2)
-    init {
-        setAnimationValue(0f)
-    }
+    private val startHsv1 = ColorValue(startColor1)
+    private val startHsv2 = ColorValue(startColor2)
+    private val endHsv1 = ColorValue(endColor1)
+    private val endHsv2 = ColorValue(endColor2)
+
+    init { setAnimationValue(0f) }
 
     fun connect(pagerView: ViewPager) {
         val pageCount = pagerView.adapter?.count ?: return
         pagerView.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int, positionOffset: Float, positionOffsetPixels: Int
-            ) {
-                Timber.d("$position $positionOffset")
-                setAnimationValue((position + positionOffset) / (pageCount - 1))
-            }
+            override fun onPageSelected(position: Int) = Unit
+            override fun onPageScrollStateChanged(state: Int) = Unit
 
-            override fun onPageSelected(position: Int) {
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
+            override fun onPageScrolled(position: Int, offset: Float, pixels: Int) {
+                setAnimationValue((position + offset) / (pageCount - 1))
             }
         })
-
     }
 
     private fun setAnimationValue(value: Float) {
@@ -47,5 +39,5 @@ class GradientAnimator(
         gradient.colors = intArrayOf(color1, color2)
     }
 
-    private fun blend(a: Hsv, b: Hsv, value: Float): Int = a.mixToColor(b, value)
+    private fun blend(a: ColorValue, b: ColorValue, value: Float): Int = a.blendWithColorToRgb(b, value)
 }

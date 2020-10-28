@@ -8,7 +8,6 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 
 class SimpleFragment(@LayoutRes private val layout: Int): Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -1,7 +1,5 @@
 package nl.michiel.zenlyinterview
 
-import android.graphics.Color.green
-import android.graphics.Color.red
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.Orientation.LEFT_RIGHT
 import android.os.Bundle
