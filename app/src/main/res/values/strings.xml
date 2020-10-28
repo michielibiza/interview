@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Zenly Interview</string>
+    <string name="intro">Hi!\nThanks for reviewing my little app! Please scroll to see what I did</string>
+    <string name="explanation">As you can see the gradient of question 2 is in the background, the counter of question 3 is below… give it a spin!</string>
+    <string name="theEnd">That\'s all folks!!</string>
 </resources>
