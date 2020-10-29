@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAdapter(): PagerAdapter {
         val pages = listOf(
-            SimpleFragment(R.layout.page2),
             SimpleFragment(R.layout.page1),
+            SimpleFragment(R.layout.page2),
             SimpleFragment(R.layout.page3)
         )
 
@@ -38,5 +38,4 @@ class MainActivity : AppCompatActivity() {
             override fun getItem(position: Int): Fragment = pages[position]
         }
     }
-
 }
