@@ -1,10 +1,16 @@
 package nl.michiel.zenlyinterview
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
+import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.VisibleForTesting
@@ -15,6 +21,7 @@ import java.util.Random
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
+
 class CounterView(
     context: Context, attrs: AttributeSet? = null
 ) : AppCompatTextView(context, attrs) {
@@ -23,6 +30,9 @@ class CounterView(
     private var animationDuration = 0f
     private var animationStartTime = 0L
     private var textHeight = 0
+    private val shaderPaint = Paint()
+    private lateinit var backingBmp: Bitmap
+    private lateinit var backingCanvas: Canvas
 
     @VisibleForTesting
     var interpolator = AccelerateDecelerateInterpolator()
@@ -32,7 +42,7 @@ class CounterView(
         set(value) {
             field = value
             stopAnimation()
-//            invalidate()
+            invalidate()
         }
 
     init {
@@ -68,21 +78,41 @@ class CounterView(
         animationStartTime
     }
 
+    @SuppressLint("DrawAllocation")
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        if (changed) {
+            backingBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            backingCanvas = Canvas(backingBmp)
+            shaderPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+            val colors = intArrayOf(Color.TRANSPARENT, Color.WHITE, Color.WHITE)
+            val points = floatArrayOf(0f, 0.4f, 1f)
+            shaderPaint.shader = LinearGradient(
+                0f, 0f, 0f, height.toFloat() / 2,
+                colors, points, Shader.TileMode.MIRROR)
+        }
+    }
+
     override fun onDraw(canvas: Canvas?) {
-        Timber.d(".")
         val animationTime = currentTimeMillis() - animationStartTime
+        Timber.d("$animationTime")
         val currentValue = propagateAnimation(animationTime)
         val currentNumber = currentValue.roundToInt()
         val offset = (currentValue - currentNumber) * lineHeight
 
         val lineHeight = paint.fontMetrics.let { it.ascent - it.descent }.absoluteValue
 
-        val centeredTextY = (height + textHeight) / 2f
-        canvas?.drawColor(Color.LTGRAY)
+        val centerY = (height + textHeight) / 2f
 
-        drawOutlinedText(currentNumber.toString(), canvas, centeredTextY - offset)
-        drawOutlinedText((currentNumber-1).toString(), canvas, centeredTextY - lineHeight - offset)
-        drawOutlinedText((currentNumber+1).toString(), canvas, centeredTextY + lineHeight - offset)
+        backingBmp.eraseColor(0)
+        backingCanvas.drawColor(0)
+        drawOutlinedText(currentNumber.toString(), centerY - offset)
+        drawOutlinedText((currentNumber - 1).toString(), centerY - lineHeight - offset)
+        drawOutlinedText((currentNumber + 1).toString(), centerY + lineHeight - offset)
+        backingCanvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), shaderPaint)
+
+        canvas?.drawColor(0)
+        canvas?.drawBitmap(backingBmp, 0f, 0f, paint)
 
         if (animationTime < animationDuration) {
             Timber.d("$animationTime   $animationDuration")
@@ -90,15 +120,15 @@ class CounterView(
         }
     }
 
-    private fun drawOutlinedText(text: String, canvas: Canvas?, centeredTextY: Float) {
+    private fun drawOutlinedText(text: String, centeredTextY: Float) {
         paint.style = Paint.Style.FILL
         paint.color = Color.WHITE
-        canvas?.drawText(text, 0f, centeredTextY, paint)
+        backingCanvas.drawText(text, 0f, centeredTextY, paint)
 
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = 1f
         paint.color = Color.BLACK
-        canvas?.drawText(text, 0f, centeredTextY, paint)
+        backingCanvas.drawText(text, 0f, centeredTextY, paint)
     }
 
     private fun propagateAnimation(animationTime: Long): Float {
