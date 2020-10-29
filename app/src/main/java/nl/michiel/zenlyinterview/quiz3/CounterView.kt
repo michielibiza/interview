@@ -1,4 +1,4 @@
-package nl.michiel.zenlyinterview
+package nl.michiel.zenlyinterview.quiz3
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -16,6 +16,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.AppCompatTextView
+import nl.michiel.zenlyinterview.R
 import timber.log.Timber
 import java.lang.System.currentTimeMillis
 import java.util.Random
@@ -44,6 +45,7 @@ class CounterView(
     private var animationStartTime = 0L
 
     private var textHeight = 0
+    private var outlineStrokeWidth = 0f
     private val shaderPaint = Paint()
     private lateinit var backingBmp: Bitmap
     private lateinit var backingCanvas: Canvas
@@ -61,10 +63,11 @@ class CounterView(
 
     init {
         val rng = Random()
-        setOnClickListener { animateTo(100 + rng.nextInt(800)) }
+        setOnClickListener { animateTo(100 + rng.nextInt(400)) }
         // this helps the view measure correctly
         minLines = 2
         maxLines = 2
+        outlineStrokeWidth = resources.getDimension(R.dimen.counterStrokeWidth)
     }
 
     @VisibleForTesting
@@ -102,7 +105,7 @@ class CounterView(
             backingCanvas = Canvas(backingBmp)
 
             // setup alpha gradient to make smooth transitions at top and bottom
-            shaderPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+            shaderPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
             val colors = intArrayOf(Color.TRANSPARENT, Color.WHITE, Color.WHITE)
             val points = floatArrayOf(0f, 0.4f, 1f)
             shaderPaint.shader = LinearGradient(
@@ -137,7 +140,7 @@ class CounterView(
         backingCanvas.drawText(text, 0f, centeredTextY, paint)
 
         paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 1f
+        paint.strokeWidth = outlineStrokeWidth
         paint.color = Color.BLACK
         backingCanvas.drawText(text, 0f, centeredTextY, paint)
     }

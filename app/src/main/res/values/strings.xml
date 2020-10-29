@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Zenly Interview</string>
-    <string name="intro">Hi!\nThanks for reviewing my little app! Please scroll to see what I did</string>
-    <string name="explanation">As you can see the gradient of question 2 is in the background, the counter of question 3 is below… give it a spin!</string>
-    <string name="theEnd">That\'s all folks!!</string>
+    <string name="intro">Hi!\nThanks for reviewing my little app 😉 Please scroll to see what I did…</string>
+    <string name="explanation">As you can see the gradient of question 2 is in the background. It is now animated halfway…\n\nThe counter of question 3 is on the next page 👉</string>
+    <string name="counter">Here is the counter, tap it to animate to a random number.</string>
+    <string name="theEnd">That\'s all folks!!\n I hope you liked it 🎉</string>
 </resources>

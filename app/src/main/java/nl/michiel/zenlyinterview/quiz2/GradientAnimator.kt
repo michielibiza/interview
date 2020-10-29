@@ -1,4 +1,4 @@
-package nl.michiel.zenlyinterview
+package nl.michiel.zenlyinterview.quiz2
 
 import android.graphics.drawable.GradientDrawable
 import androidx.annotation.ColorInt

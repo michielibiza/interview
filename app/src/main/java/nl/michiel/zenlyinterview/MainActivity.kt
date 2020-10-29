@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import kotlinx.android.synthetic.main.activity_main.pagerView
+import nl.michiel.zenlyinterview.quiz2.GradientAnimator
 import timber.log.Timber
-import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT as BEHAVIOR
+import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT as BEHAVIOUR
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,12 +29,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAdapter(): PagerAdapter {
         val pages = listOf(
-            SimpleFragment(R.layout.page1),
-            SimpleFragment(R.layout.page2),
-            SimpleFragment(R.layout.page3)
+            SimpleFragment(R.layout.start_page),
+            SimpleFragment(R.layout.gradient_page),
+            SimpleFragment(R.layout.counter_page),
         )
 
-        return object: FragmentStatePagerAdapter(supportFragmentManager, BEHAVIOR) {
+        return object: FragmentStatePagerAdapter(supportFragmentManager, BEHAVIOUR) {
             override fun getCount(): Int = pages.size
             override fun getItem(position: Int): Fragment = pages[position]
         }
