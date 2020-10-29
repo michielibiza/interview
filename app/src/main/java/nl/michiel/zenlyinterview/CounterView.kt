@@ -2,6 +2,8 @@ package nl.michiel.zenlyinterview
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
@@ -53,7 +55,24 @@ class CounterView(
     }
 
     override fun onDraw(canvas: Canvas?) {
+
         val animationTime = currentTimeMillis() - animationStartTime
+        propagateAnimation(animationTime)
+
+        paint.style = Paint.Style.FILL
+        setTextColor(Color.WHITE)
+        super.onDraw(canvas)
+
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 1f
+        setTextColor(Color.BLACK)
+        super.onDraw(canvas)
+
+        if (animationTime < animationDuration) invalidate()
+    }
+
+
+    private fun propagateAnimation(animationTime: Long) {
         text = if (animationTime < animationDuration) {
             val animationValue = interpolator.getInterpolation(animationTime / animationDuration)
             val amount = number + (animationRange * animationValue)
@@ -63,10 +82,6 @@ class CounterView(
             animationRange = 0
             number.toString()
         }
-
-        super.onDraw(canvas)
-
-        if (animationTime < animationDuration) invalidate()
     }
 
 }
