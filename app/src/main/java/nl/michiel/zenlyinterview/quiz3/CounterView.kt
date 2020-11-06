@@ -29,7 +29,7 @@ import kotlin.math.roundToInt
  * I chose to subclass TextView so we can still set the value in xml,
  * but another option would be to just subclass [View] and add the styleable attributes.
  *
- * This class has a custom [onDraw] method that renders all numbers to a bitmap,
+ * This class has a custom [onDraw] method that renders all numbers to a bitmap,oappcom
  * then we overwrite the alpha values of that bitmap to get the fading effect at top and bottom.
  * If there is a more elegant way, I'm all ears ;)
  *

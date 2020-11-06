@@ -1,2 +1,3 @@
+include ':photogrid'
 include ':app'
 rootProject.name = "Zenly Interview"
