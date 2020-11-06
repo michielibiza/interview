@@ -1,5 +1,6 @@
 package nl.michiel.photogrid.boilerplate
 
+import nl.michiel.photogrid.data.PhotoLoader
 import nl.michiel.photogrid.data.PhotoRepository
 import nl.michiel.photogrid.data.RandomUserService
 import nl.michiel.photogrid.data.createService
@@ -11,6 +12,7 @@ val appModule = module {
 
     single { PhotoRepository(get()) }
     single { createService() }
+    single { PhotoLoader(get()) }
 
     viewModel { PhotoGridViewModel(get()) }
 }

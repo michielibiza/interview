@@ -10,9 +10,7 @@ class PhotoGridApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            // Android context
             androidContext(this@PhotoGridApplication)
-            // modules
             modules(appModule)
         }
 
