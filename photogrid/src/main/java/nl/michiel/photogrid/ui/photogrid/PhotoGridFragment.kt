@@ -1,6 +1,5 @@
 package nl.michiel.photogrid.ui.photogrid
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,12 +10,13 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.photo_grid_fragment.photoGrid
 import nl.michiel.photogrid.R
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class PhotoGridFragment : Fragment() {
 
-   private val photoAdapter = GroupAdapter<GroupieViewHolder>()
+    private val viewModel: PhotoGridViewModel by viewModel()
 
-    private lateinit var viewModel: PhotoGridViewModel
+    private val photoAdapter = GroupAdapter<GroupieViewHolder>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -34,13 +34,10 @@ class PhotoGridFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PhotoGridViewModel::class.java)
-        viewModel.photos.observe(viewLifecycleOwner) { photoList ->
+        viewModel.photos    .observe(viewLifecycleOwner) { photoList ->
             photoAdapter.clear()
             photoAdapter.addAll(photoList.map { PhotoItem(it) })
-
         }
     }
-
 
 }

@@ -44,6 +44,10 @@ dependencies {
     implementation "com.xwray:groupie:$groupie_version"
     implementation "com.xwray:groupie-kotlin-android-extensions:$groupie_version"
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation "org.koin:koin-android-viewmodel:2.1.6"
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     testImplementation 'junit:junit:4.13.1'
 
