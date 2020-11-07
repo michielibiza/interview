@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import nl.michiel.photogrid.R
 import nl.michiel.photogrid.data.PhotoLoader
+import nl.michiel.photogrid.data.PrefetchForRecyclerView
 import nl.michiel.photogrid.data.SmartPhotoLoader
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -22,6 +23,7 @@ class PhotoGridFragment : Fragment() {
 
     private val viewModel: PhotoGridViewModel by viewModel()
     private val photoLoader: SmartPhotoLoader by inject()
+    private lateinit var gridLayoutManager: GridLayoutManager
 
     private val photoAdapter = GroupAdapter<GroupieViewHolder>()
 
@@ -33,7 +35,8 @@ class PhotoGridFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photoGrid.layoutManager = GridLayoutManager(context, 3)
+        gridLayoutManager = GridLayoutManager(context, 3)
+        photoGrid.layoutManager = gridLayoutManager
         val gridMargin = resources.getDimensionPixelOffset(R.dimen.gridSpacing)
         photoGrid.addItemDecoration(GridInnerMarginDecoration(gridMargin))
         photoGrid.adapter = photoAdapter
@@ -43,6 +46,7 @@ class PhotoGridFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel.photos.observe(viewLifecycleOwner) { photoList ->
             photoAdapter.clear()
+            photoLoader.strategy = PrefetchForRecyclerView(gridLayoutManager, photoList)
             photoAdapter.addAll(photoList.map { PhotoItem(it, photoLoader) })
         }
     }

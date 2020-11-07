@@ -19,7 +19,7 @@ val appModule = module {
     single { PhotoLoader(get()) }
     single { SmartPhotoLoader(get(), get(), get()) }
 
-    factory { MemoryCache(50) as PhotoCache }
+    factory { MemoryCache(90) as PhotoCache }
     factory { CoroutineScope(Dispatchers.Default) }
 
     viewModel { PhotoGridViewModel(get()) }

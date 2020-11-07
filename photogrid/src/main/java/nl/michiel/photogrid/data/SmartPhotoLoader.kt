@@ -1,7 +1,6 @@
 package nl.michiel.photogrid.data
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.widget.ImageView
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -15,9 +14,7 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import nl.michiel.photogrid.R
 import timber.log.Timber
-import java.net.URL
 import java.util.LinkedList
-import java.util.Queue
 
 class SmartPhotoLoader(
     private val photoLoader: PhotoLoader,
@@ -26,9 +23,10 @@ class SmartPhotoLoader(
     private val apiCallLimit: Int = 4,
     var strategy: LoadingStrategy = Dumb()
 ) {
+
     private val prefetchQueue = LinkedList<FetchJob>()
     private val currentJobs = mutableSetOf<FetchJob>()
-    private val counterContext = newSingleThreadContext("SmartPhotoLoader")
+    private val loaderContext = newSingleThreadContext("SmartPhotoLoader")
 
     fun load(url: String, imageView: ImageView) {
         MainScope().launch {
@@ -36,29 +34,38 @@ class SmartPhotoLoader(
             val bitmap = getAsync(url)
             if (imageView.getTag(R.id.url) == url) {
                 imageView.setImageBitmap(bitmap)
-            } else {
-                Timber.d("ignored out-of-date result")
             }
         }
     }
 
     private suspend fun getAsync(url: String): Bitmap =
-        withContext(counterContext) {
+        withContext(loaderContext) {
             Timber.d("getAsync $url")
-            val result = cache.get(url)?.let { CompletableDeferred(it) }
-                ?: currentJobs.firstOrNull { it.url == url } ?.let { it.result }
-                ?: prefetchQueue.firstOrNull { it.url == url } ?.let { it.result }
+            val result = cache.get(url)?.let {
+                Timber.v("  from cache")
+                CompletableDeferred(it)
+            }
+                ?: currentJobs.firstOrNull { it.url == url } ?.let {
+                    Timber.v("  in current job")
+                    it.result
+                }
+                ?: prefetchQueue.firstOrNull { it.url == url } ?.let {
+                    Timber.v("  in queue")
+                    it.result
+                }
                 ?: fetchAsync(url)
             result.await()
-                .also { propagate() }
         }
 
     private suspend fun fetchAsync(url: String): Deferred<Bitmap> {
-        Timber.d("fetchAsync $url")
+        Timber.i("fetchAsync $url")
         val job = FetchJob(url) {
-            Timber.d("start fetch $url")
-            photoLoader.get(url).also {
-                Timber.d("done fetch $url")
+            withContext(loaderContext) {
+                Timber.v("start fetch $url")
+                photoLoader.get(url).also {
+                    Timber.v("done fetch $url")
+                    propagate()
+                }
             }
         }
         prefetchQueue.addLast(job)
@@ -68,7 +75,9 @@ class SmartPhotoLoader(
 
     @ExperimentalCoroutinesApi
     private fun propagate() {
-        Timber.d("propagate start")
+        if (currentJobs.size > 0 || prefetchQueue.size > 0) {
+            Timber.d("propagate start jobs=${currentJobs.size} queue=${prefetchQueue.size}")
+        }
         currentJobs
             .filter { it.result.isCompleted }
             .forEach { fetchJob ->
@@ -81,7 +90,20 @@ class SmartPhotoLoader(
             Timber.d("  adding new job")
             currentJobs.add(prefetchQueue.pop().apply { start(scope) })
         }
-        Timber.d("propagate done")
+
+        if (prefetchQueue.isEmpty()) {
+            scope.launch(Dispatchers.Main) {
+                strategy.onIdle(this@SmartPhotoLoader)
+            }
+        }
+
+        Timber.v("propagate done")
+    }
+
+    fun prefetch(urls: List<String>) {
+        scope.launch {
+            urls.forEach { async { getAsync(it) } }
+        }
     }
 
     data class FetchJob(val url: String, val job: suspend () -> Bitmap) {
