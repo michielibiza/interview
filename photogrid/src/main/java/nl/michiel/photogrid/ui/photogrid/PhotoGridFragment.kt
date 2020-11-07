@@ -41,10 +41,9 @@ class PhotoGridFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val scope = MainScope()
         viewModel.photos.observe(viewLifecycleOwner) { photoList ->
             photoAdapter.clear()
-            photoAdapter.addAll(photoList.map { PhotoItem(it, photoLoader, scope) })
+            photoAdapter.addAll(photoList.map { PhotoItem(it, photoLoader) })
         }
     }
 

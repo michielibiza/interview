@@ -45,7 +45,7 @@ class SmartPhotoLoader(
     private suspend fun getAsync(url: String): Bitmap =
         withContext(counterContext) {
             Timber.d("getAsync $url")
-            val result = cache.get(url)
+            val result = cache.get(url)?.let { CompletableDeferred(it) }
                 ?: currentJobs.firstOrNull { it.url == url } ?.let { it.result }
                 ?: prefetchQueue.firstOrNull { it.url == url } ?.let { it.result }
                 ?: fetchAsync(url)
