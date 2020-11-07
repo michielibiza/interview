@@ -2,15 +2,18 @@ package nl.michiel.photogrid.data
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.widget.ImageView
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
+import nl.michiel.photogrid.R
 import timber.log.Timber
 import java.net.URL
 import java.util.LinkedList
@@ -27,8 +30,19 @@ class SmartPhotoLoader(
     private val currentJobs = mutableSetOf<FetchJob>()
     private val counterContext = newSingleThreadContext("SmartPhotoLoader")
 
+    fun load(url: String, imageView: ImageView) {
+        MainScope().launch {
+            imageView.setTag(R.id.url, url)
+            val bitmap = getAsync(url)
+            if (imageView.getTag(R.id.url) == url) {
+                imageView.setImageBitmap(bitmap)
+            } else {
+                Timber.d("ignored out-of-date result")
+            }
+        }
+    }
 
-    suspend fun getAsync(url: String): Bitmap =
+    private suspend fun getAsync(url: String): Bitmap =
         withContext(counterContext) {
             Timber.d("getAsync $url")
             val result = cache.get(url)
