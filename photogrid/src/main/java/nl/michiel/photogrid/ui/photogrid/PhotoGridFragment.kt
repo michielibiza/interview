@@ -14,13 +14,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import nl.michiel.photogrid.R
 import nl.michiel.photogrid.data.PhotoLoader
+import nl.michiel.photogrid.data.SmartPhotoLoader
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class PhotoGridFragment : Fragment() {
 
     private val viewModel: PhotoGridViewModel by viewModel()
-    private val photoLoader: PhotoLoader by inject()
+    private val photoLoader: SmartPhotoLoader by inject()
 
     private val photoAdapter = GroupAdapter<GroupieViewHolder>()
 

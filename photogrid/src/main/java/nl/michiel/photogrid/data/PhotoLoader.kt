@@ -13,17 +13,13 @@ import java.net.URL
 
 class PhotoLoader(context: Context) {
 
-    private val errorBitmap =
-        ContextCompat.getDrawable(context, R.drawable.load_error)?.toBitmap()
-            ?: Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-
     suspend fun get(url: String): Bitmap =
         withContext(Dispatchers.IO) {
             try {
                 BitmapFactory.decodeStream(URL(url).openConnection().getInputStream())
             } catch (error: Throwable) {
                 error.printStackTrace()
-                errorBitmap
+                throw error
             }
         }
 
