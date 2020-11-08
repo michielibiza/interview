@@ -2,14 +2,13 @@ package nl.michiel.photogrid.data
 
 import android.graphics.Bitmap
 import androidx.collection.LruCache
-import kotlinx.coroutines.Deferred
 
-interface PhotoCache {
+interface ImageCache {
     fun get(url: String): Bitmap?
     fun put(url: String, image: Bitmap)
 }
 
-class MemoryCache(sizeInItemCount: Int): PhotoCache {
+class MemoryCache(sizeInItemCount: Int): ImageCache {
 
     private val cache = LruCache<String, Bitmap>(sizeInItemCount)
 

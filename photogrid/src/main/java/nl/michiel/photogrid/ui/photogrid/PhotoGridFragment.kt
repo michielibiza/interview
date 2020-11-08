@@ -11,14 +11,14 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.photo_grid_fragment.photoGrid
 import nl.michiel.photogrid.R
 import nl.michiel.photogrid.data.PrefetchForRecyclerView
-import nl.michiel.photogrid.data.SmartPhotoLoader
+import nl.michiel.photogrid.data.SmartImageLoader
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class PhotoGridFragment : Fragment() {
 
     private val viewModel: PhotoGridViewModel by viewModel()
-    private val photoLoader: SmartPhotoLoader by inject()
+    private val imageLoader: SmartImageLoader by inject()
     private lateinit var gridLayoutManager: GridLayoutManager
 
     private val photoAdapter = GroupAdapter<GroupieViewHolder>()
@@ -42,8 +42,8 @@ class PhotoGridFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel.photos.observe(viewLifecycleOwner) { photoList ->
             photoAdapter.clear()
-            photoLoader.preloadStrategy = PrefetchForRecyclerView(gridLayoutManager, photoGrid, photoList)
-            photoAdapter.addAll(photoList.map { PhotoItem(it, photoLoader) })
+            imageLoader.preloadStrategy = PrefetchForRecyclerView(gridLayoutManager, photoGrid, photoList)
+            photoAdapter.addAll(photoList.map { PhotoItem(it, imageLoader) })
         }
     }
 

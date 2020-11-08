@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 import nl.michiel.photogrid.R
 import java.net.URL
 
-class PhotoLoader(context: Context) {
+class ImageLoader(context: Context) {
 
     suspend fun get(url: String): Bitmap =
         withContext(Dispatchers.IO) {

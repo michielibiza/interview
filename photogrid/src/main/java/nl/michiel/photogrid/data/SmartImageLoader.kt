@@ -26,9 +26,9 @@ import java.util.LinkedList
  * (maybe that type should just be called OnIdleListener... 🤷‍)♂️
  *
  */
-class SmartPhotoLoader(
-    private val photoLoader: PhotoLoader,
-    private val cache: PhotoCache,
+class SmartImageLoader(
+    private val imageLoader: ImageLoader,
+    private val cache: ImageCache,
     private val scope: CoroutineScope,
     private val apiCallLimit: Int = 6,
     var preloadStrategy: PreLoadStrategy = None()
@@ -79,7 +79,7 @@ class SmartPhotoLoader(
     private suspend fun fetchAsync(url: String): Deferred<Bitmap> {
         val job = FetchJob(url) {
             withContext(loaderContext) {
-                photoLoader.get(url).also { propagate() }
+                imageLoader.get(url).also { propagate() }
             }
         }
         prefetchQueue.addLast(job)
@@ -106,7 +106,7 @@ class SmartPhotoLoader(
 
         if (prefetchQueue.isEmpty()) {
             scope.launch(Dispatchers.Main) {
-                preloadStrategy.onIdle(this@SmartPhotoLoader)
+                preloadStrategy.onIdle(this@SmartImageLoader)
             }
         }
     }

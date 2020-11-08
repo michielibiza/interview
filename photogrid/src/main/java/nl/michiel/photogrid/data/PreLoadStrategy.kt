@@ -8,11 +8,11 @@ import kotlin.math.min
 import kotlin.math.max
 
 interface PreLoadStrategy {
-    fun onIdle(smartPhotoLoader: SmartPhotoLoader)
+    fun onIdle(smartImageLoader: SmartImageLoader)
 }
 
 class None : PreLoadStrategy {
-    override fun onIdle(smartPhotoLoader: SmartPhotoLoader) = Unit
+    override fun onIdle(smartImageLoader: SmartImageLoader) = Unit
 }
 
 class PrefetchForRecyclerView(
@@ -34,7 +34,7 @@ class PrefetchForRecyclerView(
         })
     }
 
-    override fun onIdle(smartPhotoLoader: SmartPhotoLoader) {
+    override fun onIdle(smartImageLoader: SmartImageLoader) {
         // don't preload during fling: it will not help and clog the download queue,
         // making loading slower when the view settles
         if (isFlinging) return
@@ -43,8 +43,8 @@ class PrefetchForRecyclerView(
         val end = manager.findLastVisibleItemPosition()
         if (start != lastStart || end != lastEnd) {
             Timber.i("onIdle visible = ($start, $end)")
-            smartPhotoLoader.prefetch(urlRange(start - preFetchAmount, start))
-            smartPhotoLoader.prefetch(urlRange(end, end + preFetchAmount))
+            smartImageLoader.prefetch(urlRange(start - preFetchAmount, start))
+            smartImageLoader.prefetch(urlRange(end, end + preFetchAmount))
             lastStart = start
             lastEnd = end
         }

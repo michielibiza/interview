@@ -3,17 +3,14 @@ package nl.michiel.photogrid.ui.photogrid
 import android.widget.ImageView
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import nl.michiel.photogrid.R
 import nl.michiel.photogrid.data.Photo
-import nl.michiel.photogrid.data.PhotoLoader
-import nl.michiel.photogrid.data.SmartPhotoLoader
+import nl.michiel.photogrid.data.SmartImageLoader
 import timber.log.Timber
 
 class PhotoItem(
     private val photo: Photo,
-    private val loader: SmartPhotoLoader
+    private val loader: SmartImageLoader
 ) : Item() {
 
     override fun getLayout(): Int = R.layout.photo_grid_item
