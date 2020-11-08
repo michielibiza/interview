@@ -4,6 +4,9 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * adds margins to items in a grid
+ */
 class GridInnerMarginDecoration(
     private val margin: Int,
     private val columnCount: Int = 3
