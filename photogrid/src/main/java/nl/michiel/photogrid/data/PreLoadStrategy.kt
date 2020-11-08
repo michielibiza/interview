@@ -41,8 +41,11 @@ class PrefetchForRecyclerView(
 
         val start = manager.findFirstVisibleItemPosition()
         val end = manager.findLastVisibleItemPosition()
+        // we only pre-load once for a visible area
         if (start != lastStart || end != lastEnd) {
             Timber.i("onIdle visible = ($start, $end)")
+            // we preload both before and after the visible area
+            // the smartImageLoader makes sure that cached (or scheduled) images are not downloaded again
             smartImageLoader.prefetch(urlRange(start - preFetchAmount, start))
             smartImageLoader.prefetch(urlRange(end, end + preFetchAmount))
             lastStart = start
