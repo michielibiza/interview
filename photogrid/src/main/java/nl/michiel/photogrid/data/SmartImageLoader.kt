@@ -23,7 +23,7 @@ import java.util.LinkedList
  * An ImageView can use function [load] to efficiently display an image from url.
  * This class takes care of multi-threading, caching and limiting concurrent API calls.
  * Pre-loading can be implemented by setting the [preloadStrategy]
- * (maybe that type should just be called OnIdleListener... 🤷‍)♂️
+ * (maybe that type should just be called OnIdleListener... 🤷‍)
  *
  */
 class SmartImageLoader(
