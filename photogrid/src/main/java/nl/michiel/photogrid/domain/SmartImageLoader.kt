@@ -54,7 +54,7 @@ class SmartImageLoader(
         MainScope().launch {
             imageView.setTag(R.id.url, url)
             val bitmap = getAsync(url)
-            // before setting the image we check that this view still has the same uel stored in tag
+            // before setting the image we check that this view still has the same url stored in tag
             // when scrolling fast it could be that the image view was recycled before the image was loaded
             if (imageView.getTag(R.id.url) == url) {
                 imageView.setImageBitmap(bitmap)
@@ -87,14 +87,16 @@ class SmartImageLoader(
     }
 
     /**
-     * this function implements the actual loading, it removes finished jobs, stored results in cache,
+     * this function implements the actual loading, it removes finished jobs, stores results in cache,
      * and starts new ones if available
      *
      * If the load queue is empty the PreLoadStrategy is notified so it can take action
      */
     @ExperimentalCoroutinesApi
     private fun propagate() {
-        currentJobs.filter { it.result.isCompleted }.forEach { fetchJob ->
+        currentJobs
+            .filter { it.result.isCompleted }
+            .forEach { fetchJob ->
                 cache.put(fetchJob.url, fetchJob.result.getCompleted())
                 currentJobs.remove(fetchJob)
             }
