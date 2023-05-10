@@ -1,4 +1,4 @@
-package nl.michiel.photogrid.data
+package nl.michiel.photogrid.domain
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

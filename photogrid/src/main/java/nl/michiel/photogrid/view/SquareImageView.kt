@@ -1,8 +1,7 @@
-package nl.michiel.photogrid.ui.photogrid
+package nl.michiel.photogrid.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.ImageView
 
 class SquareImageView(
     context: Context,

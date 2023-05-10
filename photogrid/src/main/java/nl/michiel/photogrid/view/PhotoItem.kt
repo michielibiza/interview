@@ -1,11 +1,11 @@
-package nl.michiel.photogrid.ui.photogrid
+package nl.michiel.photogrid.view
 
 import android.widget.ImageView
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import nl.michiel.photogrid.R
-import nl.michiel.photogrid.data.Photo
-import nl.michiel.photogrid.data.SmartImageLoader
+import nl.michiel.photogrid.domain.Photo
+import nl.michiel.photogrid.domain.SmartImageLoader
 import timber.log.Timber
 
 class PhotoItem(

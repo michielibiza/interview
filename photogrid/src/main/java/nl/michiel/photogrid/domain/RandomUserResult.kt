@@ -1,4 +1,4 @@
-package nl.michiel.photogrid.data
+package nl.michiel.photogrid.domain
 
 data class RandomUserResult(
     val results: List<RandomUser>

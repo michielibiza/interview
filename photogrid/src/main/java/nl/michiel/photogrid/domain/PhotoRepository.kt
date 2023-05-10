@@ -1,4 +1,4 @@
-package nl.michiel.photogrid.data
+package nl.michiel.photogrid.domain
 
 class PhotoRepository(private val service: RandomUserService) {
     suspend fun loadPhotoList(): List<Photo> =
@@ -9,4 +9,3 @@ class PhotoRepository(private val service: RandomUserService) {
             emptyList()
         }
 }
-

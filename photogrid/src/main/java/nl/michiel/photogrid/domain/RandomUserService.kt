@@ -1,4 +1,4 @@
-package nl.michiel.photogrid.data
+package nl.michiel.photogrid.domain
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

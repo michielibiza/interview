@@ -1,4 +1,4 @@
-package nl.michiel.photogrid.ui.photogrid
+package nl.michiel.photogrid.view
 
 import android.graphics.Rect
 import android.view.View

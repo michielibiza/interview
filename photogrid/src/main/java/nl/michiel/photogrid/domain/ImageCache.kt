@@ -1,4 +1,4 @@
-package nl.michiel.photogrid.data
+package nl.michiel.photogrid.domain
 
 import android.graphics.Bitmap
 import androidx.collection.LruCache

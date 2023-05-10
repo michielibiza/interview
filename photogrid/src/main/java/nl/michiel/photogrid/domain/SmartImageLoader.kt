@@ -1,4 +1,4 @@
-package nl.michiel.photogrid.data
+package nl.michiel.photogrid.domain
 
 import android.graphics.Bitmap
 import android.view.View
@@ -9,7 +9,6 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
@@ -65,8 +64,8 @@ class SmartImageLoader(
 
     private suspend fun getAsync(url: String): Bitmap = withContext(loaderContext) {
         val result = cache.get(url)?.let { CompletableDeferred(it) }
-            ?: currentJobs.firstOrNull { it.url == url }?.let { it.result }
-            ?: prefetchQueue.firstOrNull { it.url == url }?.let { it.result }
+            ?: currentJobs.firstOrNull { it.url == url }?.result
+            ?: prefetchQueue.firstOrNull { it.url == url }?.result
             ?: fetchAsync(url)
         result.await()
     }
@@ -116,8 +115,8 @@ class SmartImageLoader(
      */
     fun prefetch(urls: List<String>) {
         scope.launch {
-            // we can just use getAsync, it will not start jobs if the url is cached of is already being loaded
-            urls.forEach { async { getAsync(it) } }
+            // we can just use getAsync, it will not start jobs if the url is cached or is already being loaded
+            urls.forEach { launch { getAsync(it) } }
         }
     }
 

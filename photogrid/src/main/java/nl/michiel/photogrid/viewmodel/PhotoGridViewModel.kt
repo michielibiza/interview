@@ -1,15 +1,12 @@
-package nl.michiel.photogrid.ui.photogrid
+package nl.michiel.photogrid.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import nl.michiel.photogrid.data.Photo
-import nl.michiel.photogrid.data.PhotoRepository
-import timber.log.Timber
+import nl.michiel.photogrid.domain.Photo
+import nl.michiel.photogrid.domain.PhotoRepository
 
 class PhotoGridViewModel(
     private val repository: PhotoRepository

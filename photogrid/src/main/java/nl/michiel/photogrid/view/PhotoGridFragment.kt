@@ -1,17 +1,18 @@
-package nl.michiel.photogrid.ui.photogrid
+package nl.michiel.photogrid.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.photo_grid_fragment.photoGrid
 import nl.michiel.photogrid.R
-import nl.michiel.photogrid.data.PrefetchForRecyclerView
-import nl.michiel.photogrid.data.SmartImageLoader
+import nl.michiel.photogrid.domain.PrefetchForRecyclerView
+import nl.michiel.photogrid.domain.SmartImageLoader
+import nl.michiel.photogrid.viewmodel.PhotoGridViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 

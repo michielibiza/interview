@@ -3,7 +3,7 @@ package nl.michiel.photogrid.boilerplate
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import nl.michiel.photogrid.R
-import nl.michiel.photogrid.ui.photogrid.PhotoGridFragment
+import nl.michiel.photogrid.view.PhotoGridFragment
 
 class MainActivity : AppCompatActivity() {
 
